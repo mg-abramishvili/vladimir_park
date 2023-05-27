@@ -1,0 +1,36 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^4.1.0",
+        "autoprefixer": "^10.4.14",
+        "axios": "^1.3.4",
+        "laravel-vite-plugin": "^0.7.4",
+        "postcss": "^8.4.21",
+        "vite": "^4.2.1",
+        "vue-router": "^4.1.6"
+    },
+    "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^36.0.1",
+        "@ckeditor/ckeditor5-vue": "^4.0.1",
+        "@panzoom/panzoom": "^4.5.1",
+        "@splidejs/splide-extension-grid": "^0.4.1",
+        "@splidejs/vue-splide": "^0.6.12",
+        "dayjs": "^1.11.7",
+        "filepond": "^4.30.4",
+        "filepond-plugin-file-validate-type": "^1.2.8",
+        "filepond-plugin-image-preview": "^4.6.11",
+        "moment": "^2.29.4",
+        "simple-keyboard": "^3.5.42",
+        "simple-keyboard-layouts": "^3.1.300",
+        "swiper": "^6.8.4",
+        "vue": "^3.2.47",
+        "vue-filepond": "^7.0.3",
+        "vue-sweetalert2": "^5.0.5",
+        "vuedraggable": "^4.1.0",
+        "xlsx": "^0.18.5"
+    }
+}

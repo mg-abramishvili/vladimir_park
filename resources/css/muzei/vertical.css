@@ -1,0 +1,455 @@
+html {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    /*cursor: none;*/
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+#front {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.muzei-layout {
+    position: relative;
+    width: 100vw;
+    max-width: 100vh;
+    max-height: 177.77vw;
+    height: 177.78vw;
+    overflow: hidden;
+    margin: 0 auto;
+    background: #171F19;
+}
+
+.home {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.home .banners {
+    width: 100%;
+    height: 35vh;
+    position: relative;
+}
+.home .banners-slider {
+    height: 100%;
+    position: relative;
+}
+.home .banner-item {
+    height: 100%;
+    position: relative;
+}
+.home .banner-item-image {
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.sidebar {
+    width: 35vw;
+    height: 65vh;
+    padding: 3vh 3vh;
+}
+.sidebar .logo img {
+    width: 100%;
+}
+.sidebar .title p {
+    margin-top: 2vh;
+    margin-bottom: 0;
+    color: #fff;
+    font-size: 2vh;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.home .menu {
+    width: 65vw;
+    height: 65vh;
+    position: relative;
+}
+.home .menu-slider {
+    height: 100%;
+}
+.home .menu-item {
+    height: 16.25%;
+    position: relative;
+}
+.home .menu-item span {
+    position: absolute;
+    z-index: 10;
+    color: #fff;
+    font-size: 3vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    text-transform: uppercase;
+}
+.home .menu-item-image {
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.home .menu-item-image:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.page-header {
+    height: 7vh;
+    border-bottom: 0.2vh solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2vh;
+    color: #fff;
+}
+.page-header h1 {
+    margin: 0;
+    font-size: 2.5vh;
+    text-transform: uppercase;
+}
+.page-content {
+    height: 86vh;
+}
+.page-block {
+    margin-bottom: 3vh;
+}
+.page-block-text {
+    color: #fff !important;
+    padding: 0 4vh;
+}
+.page-block-text p {
+    font-size: 1.7vh !important;
+    margin-bottom: 2vh;
+}
+.page-block-text p:last-child {
+    margin-bottom: 0;
+}
+.page-block-image img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 50vh;
+}
+.page-block-audio {
+    text-align: center;
+    padding: 0 4vh;
+}
+.page-block-audio audio {
+    width: 100%;
+}
+.page-footer {
+    height: 7vh;
+    border-top: 0.2vh solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.page-footer button {
+    background: #fff;
+    border: 0;
+    box-shadow: none;
+    width: 4vh;
+    height: 4vh;
+    border-radius: 0.5vh;
+    padding: 0.5vh;
+}
+.page-footer button svg {
+    width: 100%;
+    height: 100%;
+    color: #df160c;
+}
+
+
+/* ROUTES */
+.routes-page {
+    
+}
+
+.key-anim01,
+.key-anim02,
+.key-anim03,
+.key-anim04,
+.key-anim05,
+.key-anim06,
+.key-anim07,
+.key-anim08,
+.key-anim09,
+.key-anim10,
+.key-anim11,
+.key-anim12 {
+    stroke-dasharray: 10;
+    stroke-dashoffset: -2000;
+    animation: Drawpath 20s linear infinite;
+}
+
+@keyframes Drawpath {
+    from {
+        stroke-dashoffset: -2000;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+.panzoom-wrapper {
+    width: 800px;
+    overflow: hidden;
+    border: 0.15vh solid #ccc;
+}
+.map1080 .panzoom-wrapper {
+    transform: scale(1.28);
+    transform-origin: 0 0;
+}
+.map4K .panzoom-wrapper {
+    transform: scale(2.5);
+    transform-origin: 0 0;
+}
+#panzoom {
+    width: 800px;
+}
+.panzoom-controls {
+    position: absolute;
+    z-index: 100;
+    top: 1vh;
+    right: 1vh;
+}
+.panzoom-controls button {
+    font-size: 3vh;
+    width: 3vh;
+    height: 3vh;
+    line-height: 3vh;
+    padding: 0;
+    border-radius: 100%;
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 0.5vh;
+    text-align: center;
+}
+.panzoom-controls button svg {
+    width: 2.5vh;
+    height: 2.5vh;
+    display: block;
+    margin: 0 auto;
+}
+.panzoom-controls button:nth-of-type(3) svg {
+    width: 1.5vh;
+    height: 1.5vh;
+}
+.map {
+    position: relative;
+    overflow: hidden;
+    width: 800px;
+}
+.map1080 img,
+.map4K img {
+    width: 800px;
+    height: auto;
+    margin-bottom: 0 !important;
+}
+.map-path {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+.routes-list {
+    margin-left: 23vh;
+    width: 26vh;
+    background: #eee;
+    border-radius: 0.75vh;
+}
+.routes-list ul {
+    list-style-type: none;
+    margin: 0;
+    height: 53.5vh;
+    padding: 0;
+    overflow-y: auto;
+}
+.routes-list ul li {
+    margin-bottom: 0.5vh;
+    height: auto;
+    overflow: hidden;
+}
+.routes-list ul li:last-child {
+    margin-bottom: 0;
+}
+.routes-list ul li a {
+    padding: 1vh 1.5vh;
+    font-size: 1.75vh;
+    border: 0;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 0.5vh;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+.routes-list-navigation {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: none;
+    padding: 0;
+    box-shadow: none;
+    color: #fff;
+    width: 3.5vh;
+    height: 3.5vh;
+    background: #000;
+    border-radius: 100%;
+    padding: 0.75vh;
+    border: 0.1vh solid #fff;
+}
+.routes-list-navigation svg {
+    width: auto;
+    height: 100%;
+}
+.routes-list-navigation-prev {
+    left: 0vh;
+}
+.routes-list-navigation-next {
+    right: 0vh;
+}
+.route-about {
+    background-color: #fff;
+    border-radius: 1vh;
+    border: 0.2vh solid #c5d0db;
+    padding: 1.5vh 2vh;
+    font-size: 2.5vh;
+    font-weight: 700;
+}
+
+.search-panel {
+    background-color: #cacaca;
+    padding: 0;
+    position: absolute;
+    top: auto;
+    z-index: 10;
+    left: 0;
+    right: 0;
+    width: calc(100vw - 4vh);
+    margin: 0 auto;
+    height: 80vh;
+    bottom: 0;
+}
+.search-panel-close-button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    box-shadow: none;
+    border: 0;
+    font-size: 10vh;
+    font-weight: 100;
+    color: #fff;
+    line-height: 1;
+    background: #000;
+    border-radius: 100%;
+    width: 4vh;
+    height: 4vh;
+    font-size: 3vh;
+    line-height: 4vh;
+}
+.search-panel input {
+    font-size: 2.5vh;
+    border: 0.1vh solid #ccc;
+    padding: 2vh;
+    width: 100%;
+    margin-bottom: 1.5vh;
+    border-radius: 1vh;
+}
+.search-panel ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    background-color: rgba(255,255,255,0.5);
+    padding: 2vh;
+    margin-top: 5vh;
+    margin-bottom: 1.5vh;
+    height: 38vh;
+    border-radius: 1vh;
+    overflow-y: auto;
+}
+.search-panel ul li {
+    margin-bottom: 1vh;
+}
+.search-panel ul li:last-child {
+    margin-bottom: 0;
+}
+.search-panel ul li a {
+    display: block;
+    font-size: 2.2vh;
+    background-color: rgba(255,255,255,0.8);
+    padding: 1vh 2vh;
+    border-radius: 1vh;
+    text-align: center;
+}
+.search-panel .kb {
+    padding: 2vh;
+    background-color: #fff;
+    border-radius: 1vh;
+}
+
+.search-panel .hg-theme-default .hg-button {
+    height: 4vh;
+    font-size: 1.75vh;
+}
+
+.keyboard {
+    margin-top: 0.5vh;
+    margin-bottom: 2vh;
+}
+.keyboard button {
+    width: 4.2vh;
+    height: 4.2vh;
+    line-height: 4.2vh;
+    margin-bottom: 0.5vh;
+    background-color: #fff;
+    font-size: 1.5vh;
+    text-align: center;
+    padding: 0;
+    border: 0.1vh solid;
+}
+.keyboard .globebutton {
+    width: 7vh;
+}
+.keyboard .spacebutton {
+    width: 10vh;
+}
+
+.map-slides-control-buttons {
+    position: absolute;
+    left: 20vw;
+    bottom: 0.1vh;
+}
+.map-slides-control-buttons button {
+    width: 12vw;
+    box-shadow: none;
+    border: none;
+    background: #1F3C8A;
+    color: #fff;
+    font-size: 1.4vh;
+    text-transform: uppercase;
+    padding: 0.5vh 1vh;
+}
+/* ROUTES */
