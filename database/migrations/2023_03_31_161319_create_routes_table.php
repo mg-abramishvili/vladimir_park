@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('floor2_text_end')->nullable();
             $table->text('route_code_floor1');
             $table->text('route_code_floor2')->nullable();
+            $table->string('icon')->nullable();
+            $table->text('description')->nullable();
+            $table->string('audio')->nullable();
             $table->timestamps();
         });
     }

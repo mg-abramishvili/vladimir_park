@@ -24,7 +24,7 @@
         <div v-if="!views.loading" class="content p-4">
             <div class="mb-4">
                 <label for="form-label">Киоск</label>
-                <select v-model="selected.kiosk" class="form-select">
+                <select v-model="selected.kiosk" @change="changeKiosk()" class="form-select">
                     <option v-for="kiosk in kiosks" :value="kiosk">{{ kiosk.name }}</option>
                 </select>
             </div>
@@ -88,6 +88,20 @@
                 </div> -->
             </div>
 
+            <div class="mb-4">
+                <label class="form-label">Аудио-файл</label>
+                <file-pond
+                    name="route_audio"
+                    ref="route_audio"
+                    label-idle="Выбрать файл"
+                    v-bind:allow-multiple="false"
+                    v-bind:allow-reorder="false"
+                    accepted-file-types="audio/mp3, audio/mpeg, audio/mp4, audio/x-m4a"
+                    :server="server"
+                    v-bind:files="filepond_audio_edit"
+                />
+            </div>
+
             <button @click="save()" class="btn btn-primary">Сохранить</button>
             <button @click="del()" v-if="$route.params.id" class="btn btn-outline-danger ms-2">Удалить</button>
         </div>
@@ -95,256 +109,349 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                schemes: [],
-                kiosks: [],
+import vueFilePond from "vue-filepond"
+import "filepond/dist/filepond.min.css"
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css"
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
+import FilePondPluginImagePreview from "filepond-plugin-image-preview"
 
-                route: '',
+const FilePond = vueFilePond(
+  FilePondPluginFileValidateType,
+  FilePondPluginImagePreview
+)
 
-                selected: {
-                    kiosk: '',
-                    scheme1: '',
-                    scheme2: '',
+export default {
+    data() {
+        return {
+            schemes: [],
+            kiosks: [],
+
+            route: '',
+
+            selected: {
+                kiosk: '',
+                scheme1: '',
+                scheme2: '',
+            },
+
+            name: '',
+            route_code_floor1: [],
+            route_code_floor2: [],
+            audio: '',
+
+            filepond_audio: [],
+            filepond_audio_edit: [],
+
+            floor1_text_begin: '',
+            floor1_text_end: '',
+            floor2_text_begin: '',
+            floor2_text_end: '',
+
+            views: {
+                loading: true,
+            },
+
+            server: {
+                remove(filename, load) {
+                    load('1');
                 },
-
-                name: '',
-                route_code_floor1: [],
-                route_code_floor2: [],
-
-                floor1_text_begin: '',
-                floor1_text_end: '',
-                floor2_text_begin: '',
-                floor2_text_end: '',
-
-                views: {
-                    loading: true,
-                }
-            }
-        },
-        created() {
-            this.loadKiosks()
-        },
-        methods: {
-            loadKiosks() {
-                axios.get('/api/admin/kiosks')
-                .then(response => {
-                    this.kiosks = response.data
-
-                    this.loadSchemes()
-                })
-            },
-            loadSchemes() {
-                axios.get('/api/admin/schemes')
-                .then(response => {
-                    this.schemes = response.data
-
-                    if(this.$route.params.id) {
-                        this.loadRoute()
-                    } else {
-                        this.views.loading = false
-                    }
-                })
-            },
-            loadRoute() {
-                axios.get(`/api/admin/route/${this.$route.params.id}`)
-                .then(response => {
-                    this.route = response.data
-
-                    this.name = response.data.name
-
-                    this.selected.kiosk = this.kiosks.find(k => k.id == response.data.kiosk_id)
-                    this.selected.scheme1 = this.schemes.find(s => s.id == response.data.scheme1_id)
-
-                    if(response.data.scheme2_id) {
-                        this.selected.scheme2 = this.schemes.find(s => s.id == response.data.scheme2_id)
-                    }
-
-                    setTimeout(() => {
-                        response.data.route_code_floor1.forEach((i, index) => {
-                            setTimeout(() => {
-                                this.route_code_floor1.push(i)
-
-                                this.renderPath(i, 1)
-                            }, (index + 1) * 100)
-                        })
-
-                        if(response.data.route_code_floor2) {
-                            response.data.route_code_floor2.forEach((i, index) => {
-                                setTimeout(() => {
-                                    this.route_code_floor2.push(i)
-                                    
-                                    this.renderPath(i, 2)
-                                }, (index + 1) * 100)
-                            })
+                process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+                    const formData = new FormData();
+                    formData.append(fieldName, file, file.name);
+                    const request = new XMLHttpRequest();
+                    request.open('POST', '/api/admin/file/upload');
+                    request.upload.onprogress = (e) => {
+                        progress(e.lengthComputable, e.loaded, e.total);
+                    };
+                    request.onload = function() {
+                        if (request.status >= 200 && request.status < 300) {
+                            load(request.responseText);
                         }
-                    }, 500)
-
-                    this.views.loading = false
-                })
+                        else {
+                            error('oh no');
+                        }
+                    };
+                    request.send(formData);
+                    return {
+                        abort: () => {
+                            request.abort();
+                            abort();
+                        }
+                    };
+                },
+                revert: (filename, load) => {
+                    load(filename)
+                },
+                load: (source, load, error, progress, abort, headers) => {
+                    var myRequest = new Request(source);
+                    fetch(myRequest).then(function(response) {
+                        response.blob().then(function(myBlob) {
+                            load(myBlob)
+                        });
+                    });
+                },
             },
-            clickOnMapScheme(event, mapID) {
-                let map
+        }
+    },
+    created() {
+        this.loadKiosks()
+    },
+    methods: {
+        loadKiosks() {
+            axios.get('/api/admin/kiosks')
+            .then(response => {
+                this.kiosks = response.data
 
-                if(mapID == 1) {
-                    map = document.getElementById('wrapper-map')
-                }
-                if(mapID == 2) {
-                    map = document.getElementById('wrapper-map2')
-                }
-
-                let x = event.pageX - map.offsetLeft
-                let y = event.pageY - map.offsetTop
-                
-                if(mapID == 1) {
-                    this.route_code_floor1.push({x,y})
-                }
-                if(mapID == 2) {
-                    this.route_code_floor2.push({x,y})
-                }
-
-                this.renderPath({x,y}, mapID)
-            },
-            renderPath(obj, mapID) {
-                let routeCodeArray
-
-                if(mapID == 1) {
-                    routeCodeArray = this.route_code_floor1
-                }
-                if(mapID == 2) {
-                    routeCodeArray = this.route_code_floor2
-                }
-
-                let svgNS = "http://www.w3.org/2000/svg"
-                let svgItem = document.createElementNS(svgNS, 'svg')
-                let circle = document.createElementNS(svgNS, 'circle')
-
-                if(routeCodeArray.length > 1) {
-                    let path = document.createElementNS(svgNS,'path')
-
-                    path.setAttribute('class', 'key-anim01')
-                    path.setAttribute('fill', 'none')
-                    path.setAttribute('stroke-width', '3px')
-                    path.setAttribute('stroke', 'rgba(200,10,10,0.5)')
-
-                    path.setAttribute('d', `M${obj.x} ${obj.y}, ${routeCodeArray.slice(-2)[0].x} ${routeCodeArray.slice(-2)[0].y}`)
-
-                    circle.setAttribute('fill', '#f33')
-                    circle.setAttribute('cx', obj.x)
-                    circle.setAttribute('cy', obj.y)
-                    circle.setAttribute('r', 4)
-                    
-                    svgItem.appendChild(path)
-                    svgItem.appendChild(circle)
-                } else {
-                    circle.setAttribute('fill', '#f33')
-                    circle.setAttribute('cx', obj.x)
-                    circle.setAttribute('cy', obj.y)
-                    circle.setAttribute('r', 4)
-
-                    svgItem.appendChild(circle)
-                }
-
-                if(mapID == 1) {
-                    document.getElementById('map-path').appendChild(svgItem)
-                }
-                if(mapID == 2) {
-                    document.getElementById('map-path2').appendChild(svgItem)
-                }
-            },
-            undoDotFloor1() {
-                let select = document.getElementById('map-path')
-                
-                if(select.lastChild) {
-                    select.removeChild(select.lastChild)
-                    this.route_code_floor1.pop()
-                }
-            },
-            undoDotFloor2() {
-                let select = document.getElementById('map-path2')
-                
-                if(select.lastChild) {
-                    select.removeChild(select.lastChild)
-                    this.route_code_floor2.pop()
-                }
-            },
-            save() {
-                if(!this.name) {
-                    return this.$swal({
-                        text: 'Назовите маршрут',
-                        icon: 'error',
-                    })
-                }
-
-                if(!this.selected.scheme1) {
-                    return this.$swal({
-                        text: 'Выберите схему',
-                        icon: 'error',
-                    })
-                }
-
-                if(!this.route_code_floor1) {
-                    return this.$swal({
-                        text: 'Нарисуйте маршрут',
-                        icon: 'error',
-                    })
-                }
+                this.loadSchemes()
+            })
+        },
+        loadSchemes() {
+            axios.get('/api/admin/schemes')
+            .then(response => {
+                this.schemes = response.data
 
                 if(this.$route.params.id) {
-                    axios.put(`/api/admin/route/${this.$route.params.id}/update`, {
-                        kiosk_id: this.selected.kiosk.id,
-                        name: this.name,
-                        scheme1_id: this.selected.scheme1.id,
-                        scheme2_id: this.selected.scheme2.id,
-                        floor1_text_begin: this.floor1_text_begin,
-                        floor1_text_end: this.floor1_text_end,
-                        floor2_text_begin: this.floor2_text_begin,
-                        floor2_text_end: this.floor2_text_end,
-                        route_code_floor1: this.route_code_floor1,
-                        route_code_floor2: this.route_code_floor2
-                    })
-                    .then(response => (
-                        this.$router.push({name: 'Routes', params: {kiosk: 1} })
-                    ))
-                    .catch((error) => {
-                        //
-                    })
+                    this.loadRoute()
                 } else {
-                    axios.post(`/api/admin/routes`, {
-                        kiosk_id: this.selected.kiosk.id,
-                        name: this.name,
-                        scheme1_id: this.selected.scheme1.id,
-                        scheme2_id: this.selected.scheme2.id,
-                        floor1_text_begin: this.floor1_text_begin,
-                        floor1_text_end: this.floor1_text_end,
-                        floor2_text_begin: this.floor2_text_begin,
-                        floor2_text_end: this.floor2_text_end,
-                        route_code_floor1: this.route_code_floor1,
-                        route_code_floor2: this.route_code_floor2
-                    })
-                    .then(response => (
-                        this.$router.push({name: 'Routes', params: {kiosk: 1} })
-                    ))
-                    .catch((error) => {
-                        //
-                    })
+                    this.views.loading = false
                 }
-            },
-            del() {
-                if(confirm('Точно удалить маршрут?')) {
-                    axios.delete(`/api/admin/route/${this.$route.params.id}/delete`)
-                    .then(response => {
-                        this.$router.push({ name: 'Routes', params: {kiosk: 1} })
-                    })
-                    .catch(errors => {
-                        return this.$swal({
-                            text: 'Ошибка',
-                            icon: 'error',
-                        })
-                    })
-                }
-            },
+            })
         },
+        loadRoute() {
+            axios.get(`/api/admin/route/${this.$route.params.id}`)
+            .then(response => {
+                this.route = response.data
+
+                this.name = response.data.name
+
+                this.selected.kiosk = this.kiosks.find(k => k.id == response.data.kiosk_id)
+                this.selected.scheme1 = this.schemes.find(s => s.id == response.data.scheme1_id)
+
+                if(response.data.scheme2_id) {
+                    this.selected.scheme2 = this.schemes.find(s => s.id == response.data.scheme2_id)
+                }
+
+                if(response.data.audio) {
+                    this.filepond_audio_edit = [
+                        {
+                            source: response.data.audio,
+                            options: {
+                                type: 'local',
+                            }
+                        }
+                    ]
+                }
+
+                setTimeout(() => {
+                    response.data.route_code_floor1.forEach((i, index) => {
+                        setTimeout(() => {
+                            this.route_code_floor1.push(i)
+
+                            this.renderPath(i, 1)
+                        }, (index + 1) * 100)
+                    })
+
+                    if(response.data.route_code_floor2) {
+                        response.data.route_code_floor2.forEach((i, index) => {
+                            setTimeout(() => {
+                                this.route_code_floor2.push(i)
+                                
+                                this.renderPath(i, 2)
+                            }, (index + 1) * 100)
+                        })
+                    }
+                }, 500)
+
+                this.views.loading = false
+            })
+        },
+        changeKiosk() {
+            this.selected.scheme1 = this.schemes.find(s => s.id == this.selected.kiosk.scheme_id)
+            this.selected.scheme2 = ''
+            this.route_code_floor1 = []
+            this.route_code_floor2 = []
+
+            let kioskXY = {
+                x: this.selected.kiosk.x,
+                y: this.selected.kiosk.y
+            }
+
+            setTimeout(() => {
+                this.route_code_floor1.push(kioskXY)
+
+                this.renderPath(kioskXY, this.selected.kiosk.scheme_id)
+            }, 500)
+        },
+        clickOnMapScheme(event, mapID) {
+            let map
+
+            if(mapID == 1) {
+                map = document.getElementById('wrapper-map')
+            }
+            if(mapID == 2) {
+                map = document.getElementById('wrapper-map2')
+            }
+
+            let x = event.pageX - map.offsetLeft
+            let y = event.pageY - map.offsetTop
+            
+            if(mapID == 1) {
+                this.route_code_floor1.push({x,y})
+            }
+            if(mapID == 2) {
+                this.route_code_floor2.push({x,y})
+            }
+
+            this.renderPath({x,y}, mapID)
+        },
+        renderPath(obj, mapID) {
+            console.log(obj, mapID)
+            let routeCodeArray
+
+            if(mapID == 1) {
+                routeCodeArray = this.route_code_floor1
+            }
+            if(mapID == 2) {
+                routeCodeArray = this.route_code_floor2
+            }
+
+            let svgNS = "http://www.w3.org/2000/svg"
+            let svgItem = document.createElementNS(svgNS, 'svg')
+            let circle = document.createElementNS(svgNS, 'circle')
+
+            if(routeCodeArray.length > 1) {
+                let path = document.createElementNS(svgNS,'path')
+
+                path.setAttribute('class', 'key-anim01')
+                path.setAttribute('fill', 'none')
+                path.setAttribute('stroke-width', '3px')
+                path.setAttribute('stroke', 'rgba(200,10,10,0.5)')
+
+                path.setAttribute('d', `M${obj.x} ${obj.y}, ${routeCodeArray.slice(-2)[0].x} ${routeCodeArray.slice(-2)[0].y}`)
+
+                circle.setAttribute('fill', '#f33')
+                circle.setAttribute('cx', obj.x)
+                circle.setAttribute('cy', obj.y)
+                circle.setAttribute('r', 4)
+                
+                svgItem.appendChild(path)
+                svgItem.appendChild(circle)
+            } else {
+                circle.setAttribute('fill', '#f33')
+                circle.setAttribute('cx', obj.x)
+                circle.setAttribute('cy', obj.y)
+                circle.setAttribute('r', 4)
+
+                svgItem.appendChild(circle)
+            }
+
+            if(mapID == 1) {
+                document.getElementById('map-path').appendChild(svgItem)
+            }
+            if(mapID == 2) {
+                document.getElementById('map-path2').appendChild(svgItem)
+            }
+        },
+        undoDotFloor1() {
+            let select = document.getElementById('map-path')
+            
+            if(select.lastChild) {
+                select.removeChild(select.lastChild)
+                this.route_code_floor1.pop()
+            }
+        },
+        undoDotFloor2() {
+            let select = document.getElementById('map-path2')
+            
+            if(select.lastChild) {
+                select.removeChild(select.lastChild)
+                this.route_code_floor2.pop()
+            }
+        },
+        save() {
+            if(!this.name) {
+                return this.$swal({
+                    text: 'Назовите маршрут',
+                    icon: 'error',
+                })
+            }
+
+            if(!this.selected.scheme1) {
+                return this.$swal({
+                    text: 'Выберите схему',
+                    icon: 'error',
+                })
+            }
+
+            if(!this.route_code_floor1) {
+                return this.$swal({
+                    text: 'Нарисуйте маршрут',
+                    icon: 'error',
+                })
+            }
+
+            if(document.getElementsByName("route_audio")[0]) {
+                this.audio = document.getElementsByName("route_audio")[0].value
+            }
+
+            if(this.$route.params.id) {
+                axios.put(`/api/admin/route/${this.$route.params.id}/update`, {
+                    kiosk_id: this.selected.kiosk.id,
+                    name: this.name,
+                    scheme1_id: this.selected.scheme1.id,
+                    scheme2_id: this.selected.scheme2.id,
+                    floor1_text_begin: this.floor1_text_begin,
+                    floor1_text_end: this.floor1_text_end,
+                    floor2_text_begin: this.floor2_text_begin,
+                    floor2_text_end: this.floor2_text_end,
+                    route_code_floor1: this.route_code_floor1,
+                    route_code_floor2: this.route_code_floor2,
+                    audio: this.audio,
+                })
+                .then(response => (
+                    this.$router.push({name: 'Routes', params: {kiosk: 1} })
+                ))
+                .catch((error) => {
+                    //
+                })
+            } else {
+                axios.post(`/api/admin/routes`, {
+                    kiosk_id: this.selected.kiosk.id,
+                    name: this.name,
+                    scheme1_id: this.selected.scheme1.id,
+                    scheme2_id: this.selected.scheme2.id,
+                    floor1_text_begin: this.floor1_text_begin,
+                    floor1_text_end: this.floor1_text_end,
+                    floor2_text_begin: this.floor2_text_begin,
+                    floor2_text_end: this.floor2_text_end,
+                    route_code_floor1: this.route_code_floor1,
+                    route_code_floor2: this.route_code_floor2
+                })
+                .then(response => (
+                    this.$router.push({name: 'Routes', params: {kiosk: 1} })
+                ))
+                .catch((error) => {
+                    //
+                })
+            }
+        },
+        del() {
+            if(confirm('Точно удалить маршрут?')) {
+                axios.delete(`/api/admin/route/${this.$route.params.id}/delete`)
+                .then(response => {
+                    this.$router.push({ name: 'Routes', params: {kiosk: 1} })
+                })
+                .catch(errors => {
+                    return this.$swal({
+                        text: 'Ошибка',
+                        icon: 'error',
+                    })
+                })
+            }
+        },
+    },
+    components: {
+        FilePond
     }
+}
 </script>

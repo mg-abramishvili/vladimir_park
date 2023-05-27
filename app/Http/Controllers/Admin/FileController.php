@@ -229,5 +229,20 @@ class FileController extends Controller
                 'Content-Disposition' => 'inline',
             ]);
         }
+
+        if (request()->file('route_audio')) {
+            $file = request()->file('route_audio');
+            $filename = time().'.'.$file->extension();
+
+            if (!file_exists(public_path() . '/uploads/page_route_audios')) {
+                mkdir(public_path() . '/uploads/page_route_audios', 0755, true);
+            }
+
+            $file->move(public_path() . '/uploads/page_route_audios', $filename);
+
+            return \Response::make('/uploads/page_route_audios/' . $filename, 200, [
+                'Content-Disposition' => 'inline',
+            ]);
+        }
     }
 }
