@@ -281,6 +281,11 @@ html, body {
     margin-left: 1.5vh;
     width: calc(100% - 3vh);
     background: #eee;
+    animation: routeslist 0.8s;
+}
+@keyframes routeslist {
+    from {margin-top: 100vh;}
+    to {margin-top: 0;}
 }
 .routes-list ul {
     list-style-type: none;
@@ -462,6 +467,20 @@ html, body {
     left: 1.5vh;
     right: 1.5vh;
     background-color: rgba(61, 36, 131, 1);
-    padding: 5vh;
+    padding: 3vh;
+    overflow-y: auto;
+    animation: aboutpanel 0.5s;
+}
+@keyframes aboutpanel {
+    from {top: 100vh;}
+    to {top: 53.3vh;}
+}
+.about-panel p {
+    margin-bottom: 2vh;
+    font-size: 1.5vh !important;
+    color: #fff !important;
+}
+.about-panel p:last-child {
+    margin-bottom: 0;
 }
 /* ROUTES */
