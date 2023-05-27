@@ -84,7 +84,7 @@
             </div>
         </div>
 
-        <div class="routes-list">
+        <div v-show="views.routesList" class="routes-list">
             <!-- <swiper v-if="routes.length"
                 :slides-per-view="1"
                 :space-between="0"
@@ -148,6 +148,11 @@
                 </div>
             </div>
         </div>
+
+        <div v-if="selected.route" class="about-panel">
+            <button @click="resetRoutes()">&times;</button>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt corporis tenetur, odit illo doloribus hic laborum blanditiis quam illum minus harum maiores minima veritatis rerum repellat error ducimus vel cumque molestiae cum, totam, nobis perspiciatis labore in. At incidunt qui beatae vel quasi officia, dicta illum ducimus corrupti eaque voluptate.</p>
+        </div>
     </div>
     <p v-show="!routes.length" class="text-danger">Маршрутов нет.</p>
 </template>
@@ -174,6 +179,7 @@ export default {
             },
 
             views: {
+                routesList: true,
                 searchPanel: false,
                 windowWidth: '',
             },
@@ -231,6 +237,7 @@ export default {
         },
         SelectRoute(route) {
             this.views.searchPanel = false
+            this.views.routesList = false
             this.searchInput = ''
 
             axios.get(`/api/route/${route.id}`)
@@ -272,6 +279,7 @@ export default {
             this.selected.slide = 1
             this.selected.route = ''
             this.searchInput = ''
+            this.views.routesList = true
         },
         zoomIn() {
             this.panzoom.zoomIn()

@@ -78,7 +78,7 @@ html, body {
     height: 100%;
 }
 .home .menu-item {
-    height: 16.25%;
+    height: 25% !important;
     position: relative;
 }
 .home .menu-item span {
@@ -127,6 +127,7 @@ html, body {
 }
 .page-content {
     height: 86vh;
+    overflow: hidden;
 }
 .page-block {
     margin-bottom: 3vh;
@@ -216,6 +217,9 @@ html, body {
 .map1080 .panzoom-wrapper {
     transform: scale(1.28);
     transform-origin: 0 0;
+    margin-left: 1.5vh;
+    margin-top: 1vh;
+    margin-bottom: 11vh;
 }
 .map4K .panzoom-wrapper {
     transform: scale(2.5);
@@ -274,15 +278,14 @@ html, body {
     z-index: 100;
 }
 .routes-list {
-    margin-left: 23vh;
-    width: 26vh;
+    margin-left: 1.5vh;
+    width: calc(100% - 3vh);
     background: #eee;
-    border-radius: 0.75vh;
 }
 .routes-list ul {
     list-style-type: none;
     margin: 0;
-    height: 53.5vh;
+    height: 38.5vh;
     padding: 0;
     overflow-y: auto;
 }
@@ -451,5 +454,14 @@ html, body {
     font-size: 1.4vh;
     text-transform: uppercase;
     padding: 0.5vh 1vh;
+}
+.about-panel {
+    position: absolute;
+    top: 53.3vh;
+    height: 38.5vh;
+    left: 1.5vh;
+    right: 1.5vh;
+    background-color: rgba(61, 36, 131, 1);
+    padding: 5vh;
 }
 /* ROUTES */
