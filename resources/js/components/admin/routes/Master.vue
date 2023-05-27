@@ -305,7 +305,6 @@ export default {
             this.renderPath({x,y}, mapID)
         },
         renderPath(obj, mapID) {
-            console.log(obj, mapID)
             let routeCodeArray
 
             if(mapID == 1) {
@@ -355,7 +354,7 @@ export default {
         undoDotFloor1() {
             let select = document.getElementById('map-path')
             
-            if(select.lastChild) {
+            if(select.lastChild && select.childNodes.length > 1) {
                 select.removeChild(select.lastChild)
                 this.route_code_floor1.pop()
             }
