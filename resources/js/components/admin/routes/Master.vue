@@ -424,7 +424,8 @@ export default {
                     floor2_text_begin: this.floor2_text_begin,
                     floor2_text_end: this.floor2_text_end,
                     route_code_floor1: this.route_code_floor1,
-                    route_code_floor2: this.route_code_floor2
+                    route_code_floor2: this.route_code_floor2,
+                    audio: this.audio,
                 })
                 .then(response => (
                     this.$router.push({name: 'Routes', params: {kiosk: 1} })

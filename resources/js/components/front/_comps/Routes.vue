@@ -151,6 +151,11 @@
 
         <div v-if="selected.route" class="about-panel">
             <button @click="resetRoutes()">&times;</button>
+
+            <audio v-if="selected.route.audio" :id="'audio_' + selected.route.id" autoplay controls disablePictureInPicture controlsList="noplaybackrate nodownload">
+                <source :src="selected.route.audio" type="audio/mpeg" />
+            </audio>
+
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt corporis tenetur, odit illo doloribus hic laborum blanditiis quam illum minus harum maiores minima veritatis rerum repellat error ducimus vel cumque molestiae cum, totam, nobis perspiciatis labore in. At incidunt qui beatae vel quasi officia, dicta illum ducimus corrupti eaque voluptate.</p>
         </div>
     </div>

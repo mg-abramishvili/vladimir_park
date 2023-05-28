@@ -53,6 +53,10 @@ class RouteController extends Controller
         }
         $route->route_code_floor2 = $request->route_code_floor2;
 
+        if($request->audio) {
+            $route->audio = $request->audio;
+        }
+
         $route->save();
     }
 
@@ -90,6 +94,10 @@ class RouteController extends Controller
             $request->route_code_floor2 = [];
         }
         $route->route_code_floor2 = $request->route_code_floor2;
+
+        if($request->audio) {
+            $route->audio = $request->audio;
+        }
 
         $route->save();
     }
