@@ -29,12 +29,12 @@
                         <svg v-if="selected.slide == 1" class="map-path svg1">
                             <template v-for="(point, index) in selected.route.route_code_floor1">
                                 <template v-if="selected.route.route_code_floor1[index - 1]">
-                                    <path v-if="point.x" class="key-anim01" fill="none" stroke-width="4px" stroke="rgba(255,51,51,0.8)" :d="'M' + point.x + ' ' + point.y + ', ' + selected.route.route_code_floor1[index - 1].x + ' ' + selected.route.route_code_floor1[index - 1].y"></path>
+                                    <path v-if="point.x" class="key-anim01" fill="none" stroke-width="4px" stroke="#3d2483" :d="'M' + point.x + ' ' + point.y + ', ' + selected.route.route_code_floor1[index - 1].x + ' ' + selected.route.route_code_floor1[index - 1].y"></path>
                                 </template>
                                 <template v-else>
-                                    <path v-if="point.x" class="key-anim01" fill="none" stroke-width="4px" stroke="rgba(255,51,51,0.8)" :d="'M' + point.x + ' ' + point.y + ', '"></path>
+                                    <path v-if="point.x" class="key-anim01" fill="none" stroke-width="4px" stroke="#3d2483" :d="'M' + point.x + ' ' + point.y + ', '"></path>
                                 </template>
-                                <circle v-if="point.x" :cx="point.x" :cy="point.y" :r="index == selected.route.route_code_floor1.length - 1 ? 6 : 2" fill="#f33"></circle>
+                                <circle v-if="point.x" :cx="point.x" :cy="point.y" :r="index == selected.route.route_code_floor1.length - 1 ? 6 : 2" fill="#3d2483"></circle>
                             
                                 <!-- <text v-if="index == 0" style="stroke: #ffffff; stroke-width: 0.5px;" :x='point.x' :y='point.y' font-family='Verdana' font-size='12' fill='red'><tspan dx='-20' dy='30' font-weight='bold'>{{ selected.route.floor1_text_begin }}</tspan></text> -->
                                 <!-- <text v-if="index == selected.route.route_code_floor1.length - 1" style="stroke: #ffffff; stroke-width: 0.5px;" :x='point.x' :y='point.y' font-family='Verdana' font-size='12' fill='red'><tspan dx='-20' dy='30' font-weight='bold'>{{ selected.route.floor1_text_end }}</tspan></text> -->
@@ -50,7 +50,7 @@
                                 <template v-else>
                                     <path v-if="point.x" class="key-anim01" fill="none" stroke-width="4px" stroke="rgba(255,51,51,0.8)" :d="'M' + point.x + ' ' + point.y + ', '"></path>
                                 </template>
-                                <circle v-if="point.x" :cx="point.x" :cy="point.y" :r="index == selected.route.route_code_floor2.length - 1 ? 6 : 2" fill="#f33"></circle>
+                                <circle v-if="point.x" :cx="point.x" :cy="point.y" :r="index == selected.route.route_code_floor2.length - 1 ? 6 : 2" fill="#3d2483"></circle>
 
                                 <!-- <text v-if="index == 0" style="stroke: #ffffff; stroke-width: 0.5px;" :x='point.x' :y='point.y' font-family='Verdana' font-size='12' fill='red'><tspan dx='-20' dy='30' font-weight='bold'>{{ selected.route.floor2_text_begin }}</tspan></text> -->
                                 <!-- <text v-if="index == selected.route.route_code_floor2.length - 1" style="stroke: #ffffff; stroke-width: 0.5px;" :x='point.x' :y='point.y' font-family='Verdana' font-size='12' fill='red'><tspan dx='-20' dy='30' font-weight='bold'>{{ selected.route.floor2_text_end }}</tspan></text> -->
@@ -70,7 +70,7 @@
 
                             <g :transform="'translate(' + (kiosks.find(k => k.id == kiosk).x - 12) + ',' + (kiosks.find(k => k.id == kiosk).y - 12) + ')'">
                                 <svg width="24" height="24" fill="none" stroke="none">
-                                    <path fill="red" d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <path fill="#3d2483" d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                     <circle fill="white" cx="12" cy="10" r="3"></circle>
                                 </svg>
                             </g>

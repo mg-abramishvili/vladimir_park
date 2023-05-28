@@ -466,7 +466,7 @@ html, body {
     height: 38.5vh;
     left: 1.5vh;
     right: 1.5vh;
-    background-color: rgba(61, 36, 131, 1);
+    background-color: #3d2483;
     padding: 3vh;
     overflow-y: auto;
     animation: aboutpanel 0.5s;

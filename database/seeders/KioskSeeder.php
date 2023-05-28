@@ -16,8 +16,8 @@ class KioskSeeder extends Seeder
                 'id' => 1,
                 'name' => 'Киоск №1',
                 'scheme_id' => 1,
-                'x' => 10,
-                'y' => 10,
+                'x' => 450,
+                'y' => 80,
             ],
         ]);
     }

@@ -55,6 +55,8 @@ class RouteController extends Controller
 
         $route->audio = $request->audio;
         $route->description = $request->description;
+        $route->icon = $request->icon;
+        $route->image = $request->image;
 
         $route->save();
     }
@@ -96,6 +98,8 @@ class RouteController extends Controller
 
         $route->audio = $request->audio;
         $route->description = $request->description;
+        $route->icon = $request->icon;
+        $route->image = $request->image;
 
         $route->save();
     }

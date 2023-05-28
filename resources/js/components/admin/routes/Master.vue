@@ -93,6 +93,20 @@
             </div>
 
             <div class="mb-4">
+                <label class="form-label">Картинка</label>
+                <file-pond
+                    name="route_image"
+                    ref="route_image"
+                    label-idle="Выбрать файл"
+                    v-bind:allow-multiple="false"
+                    v-bind:allow-reorder="false"
+                    accepted-file-types="image/png, image/jpeg"
+                    :server="server"
+                    v-bind:files="filepond_image_edit"
+                />
+            </div>
+            
+            <div class="mb-4">
                 <label class="form-label">Аудио-файл</label>
                 <file-pond
                     name="route_audio"
@@ -103,6 +117,20 @@
                     accepted-file-types="audio/mp3, audio/mpeg, audio/mp4, audio/x-m4a"
                     :server="server"
                     v-bind:files="filepond_audio_edit"
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Иконка</label>
+                <file-pond
+                    name="route_icon"
+                    ref="route_icon"
+                    label-idle="Выбрать файл"
+                    v-bind:allow-multiple="false"
+                    v-bind:allow-reorder="false"
+                    accepted-file-types="image/png"
+                    :server="server"
+                    v-bind:files="filepond_icon_edit"
                 />
             </div>
 
@@ -146,9 +174,17 @@ export default {
             route_code_floor2: [],
             audio: '',
             description: '',
+            icon: '',
+            image: '',
 
             filepond_audio: [],
             filepond_audio_edit: [],
+
+            filepond_icon: [],
+            filepond_icon_edit: [],
+
+            filepond_image: [],
+            filepond_image_edit: [],
 
             floor1_text_begin: '',
             floor1_text_end: '',
@@ -249,6 +285,28 @@ export default {
                     this.filepond_audio_edit = [
                         {
                             source: response.data.audio,
+                            options: {
+                                type: 'local',
+                            }
+                        }
+                    ]
+                }
+
+                if(response.data.icon) {
+                    this.filepond_icon_edit = [
+                        {
+                            source: response.data.icon,
+                            options: {
+                                type: 'local',
+                            }
+                        }
+                    ]
+                }
+
+                if(response.data.image) {
+                    this.filepond_image_edit = [
+                        {
+                            source: response.data.image,
                             options: {
                                 type: 'local',
                             }
@@ -407,6 +465,14 @@ export default {
                 this.audio = document.getElementsByName("route_audio")[0].value
             }
 
+            if(document.getElementsByName("route_icon")[0]) {
+                this.icon = document.getElementsByName("route_icon")[0].value
+            }
+
+            if(document.getElementsByName("route_image")[0]) {
+                this.image = document.getElementsByName("route_image")[0].value
+            }
+
             if(this.$route.params.id) {
                 axios.put(`/api/admin/route/${this.$route.params.id}/update`, {
                     kiosk_id: this.selected.kiosk.id,
@@ -421,6 +487,8 @@ export default {
                     route_code_floor2: this.route_code_floor2,
                     audio: this.audio,
                     description: this.description,
+                    icon: this.icon,
+                    image: this.image,
                 })
                 .then(response => (
                     this.$router.push({name: 'Routes', params: {kiosk: 1} })
@@ -442,6 +510,8 @@ export default {
                     route_code_floor2: this.route_code_floor2,
                     audio: this.audio,
                     description: this.description,
+                    icon: this.icon,
+                    image: this.image,
                 })
                 .then(response => (
                     this.$router.push({name: 'Routes', params: {kiosk: 1} })

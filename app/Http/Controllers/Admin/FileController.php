@@ -234,13 +234,46 @@ class FileController extends Controller
             $file = request()->file('route_audio');
             $filename = time().'.'.$file->extension();
 
-            if (!file_exists(public_path() . '/uploads/page_route_audios')) {
-                mkdir(public_path() . '/uploads/page_route_audios', 0755, true);
+            if (!file_exists(public_path() . '/uploads/route_audios')) {
+                mkdir(public_path() . '/uploads/route_audios', 0755, true);
             }
 
-            $file->move(public_path() . '/uploads/page_route_audios', $filename);
+            $file->move(public_path() . '/uploads/route_audios', $filename);
 
-            return \Response::make('/uploads/page_route_audios/' . $filename, 200, [
+            return \Response::make('/uploads/route_audios/' . $filename, 200, [
+                'Content-Disposition' => 'inline',
+            ]);
+        }
+
+        if (request()->file('route_icon')) {
+            $file = request()->file('route_icon');
+            $filename = time().'.'.$file->extension();
+
+            if (!file_exists(public_path() . '/uploads/route_icons')) {
+                mkdir(public_path() . '/uploads/route_icons', 0755, true);
+            }
+
+            $file->move(public_path() . '/uploads/route_icons', $filename);
+
+            return \Response::make('/uploads/route_icons/' . $filename, 200, [
+                'Content-Disposition' => 'inline',
+            ]);
+        }
+
+        if (request()->file('route_image')) {
+            $file = request()->file('route_image');
+            $filename = time().'.'.$file->extension();
+
+            if (!file_exists(public_path() . '/uploads/route_images')) {
+                mkdir(public_path() . '/uploads/route_images', 0755, true);
+            }
+
+            $img = Image::make($file->path());
+            $img->resize(1000, 1000, function ($const) {
+                $const->aspectRatio();
+            })->save(public_path() . '/uploads/route_images/' . $filename);
+
+            return \Response::make('/uploads/route_images/' . $filename, 200, [
                 'Content-Disposition' => 'inline',
             ]);
         }

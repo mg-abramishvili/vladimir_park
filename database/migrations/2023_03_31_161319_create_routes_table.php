@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('icon')->nullable();
             $table->text('description')->nullable();
             $table->string('audio')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
