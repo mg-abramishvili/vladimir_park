@@ -89,6 +89,10 @@
             </div>
 
             <div class="mb-4">
+                <ckeditor :editor="editor" v-model="description" :config="editorConfig"></ckeditor>
+            </div>
+
+            <div class="mb-4">
                 <label class="form-label">Аудио-файл</label>
                 <file-pond
                     name="route_audio"
@@ -120,6 +124,9 @@ const FilePond = vueFilePond(
   FilePondPluginImagePreview
 )
 
+import CKEditor from '@ckeditor/ckeditor5-vue'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+
 export default {
     data() {
         return {
@@ -138,6 +145,7 @@ export default {
             route_code_floor1: [],
             route_code_floor2: [],
             audio: '',
+            description: '',
 
             filepond_audio: [],
             filepond_audio_edit: [],
@@ -191,6 +199,11 @@ export default {
                     });
                 },
             },
+
+            editor: ClassicEditor,
+            editorConfig: {
+                toolbar: [ 'bold', 'italic', '|', 'alignment', '|', 'bulletedList', 'numberedList', '|', 'insertTable', '|', 'undo', 'redo' ],
+            },
         }
     },
     created() {
@@ -223,6 +236,7 @@ export default {
                 this.route = response.data
 
                 this.name = response.data.name
+                this.description = response.data.description
 
                 this.selected.kiosk = this.kiosks.find(k => k.id == response.data.kiosk_id)
                 this.selected.scheme1 = this.schemes.find(s => s.id == response.data.scheme1_id)
@@ -406,6 +420,7 @@ export default {
                     route_code_floor1: this.route_code_floor1,
                     route_code_floor2: this.route_code_floor2,
                     audio: this.audio,
+                    description: this.description,
                 })
                 .then(response => (
                     this.$router.push({name: 'Routes', params: {kiosk: 1} })
@@ -426,6 +441,7 @@ export default {
                     route_code_floor1: this.route_code_floor1,
                     route_code_floor2: this.route_code_floor2,
                     audio: this.audio,
+                    description: this.description,
                 })
                 .then(response => (
                     this.$router.push({name: 'Routes', params: {kiosk: 1} })
@@ -451,7 +467,8 @@ export default {
         },
     },
     components: {
-        FilePond
+        FilePond,
+        ckeditor: CKEditor.component,
     }
 }
 </script>
