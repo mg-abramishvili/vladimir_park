@@ -26,7 +26,7 @@
                     <template v-for="scheme in schemes">
                         <img v-show="scheme.id == selected.scheme.id" :src="scheme.image">
 
-                        <svg v-if="selected.slide == 1" class="map-path svg1">
+                        <svg v-if="views.routePath && selected.slide == 1" class="map-path svg1">
                             <template v-for="(point, index) in selected.route.route_code_floor1">
                                 <template v-if="selected.route.route_code_floor1[index - 1]">
                                     <path v-if="point.x" class="key-anim01" fill="none" stroke-width="4px" stroke="#3d2483" :d="'M' + point.x + ' ' + point.y + ', ' + selected.route.route_code_floor1[index - 1].x + ' ' + selected.route.route_code_floor1[index - 1].y"></path>
@@ -42,7 +42,7 @@
                             </template>
                         </svg>
 
-                        <svg v-if="selected.slide == 2" class="map-path svg1">
+                        <svg v-if="views.routePath && selected.slide == 2" class="map-path svg1">
                             <template v-for="(point, index) in selected.route.route_code_floor2">
                                 <template v-if="selected.route.route_code_floor2[index - 1]">
                                     <path v-if="point.x" class="key-anim01" fill="none" stroke-width="4px" stroke="rgba(255,51,51,0.8)" :d="'M' + point.x + ' ' + point.y + ', ' + selected.route.route_code_floor2[index - 1].x + ' ' + selected.route.route_code_floor2[index - 1].y"></path>
@@ -79,6 +79,10 @@
                                 <tspan dx='0' dy='10' font-weight='bold'>Вы здесь</tspan>
                             </text>
                         </svg>
+                    </template>
+
+                    <template v-if="views.routesIcons" v-for="route in routes">
+                        <img v-if="route.scheme1_id == selected.scheme.id" @click="SelectRoute(route)" :src="route.icon" v-bind:style="{ 'position': 'absolute', 'z-index': '1', 'width': '3vh', 'height': '3vh', 'margin-left': '-1.5vh', 'margin-top': '-1.5vh', 'top': route.route_code_floor1[route.route_code_floor1.length - 1].y + 'px', 'left': route.route_code_floor1[route.route_code_floor1.length - 1].x + 'px' }">
                     </template>
                 </div>
             </div>
@@ -119,7 +123,7 @@
             </ul>
         </div>
 
-        <div class="map-slides-control-buttons">
+        <div v-if="views.routePath" class="map-slides-control-buttons">
             <button v-show="views.searchPanel == false && selected.slide === 2" @click="PrevScheme(selected.route)" class="prevnextbutton prev_button">
                 &larr; Начало маршрута
             </button>
@@ -149,14 +153,24 @@
             </div>
         </div>
 
-        <div v-if="selected.route" class="about-panel">
-            <button @click="resetRoutes()">&times;</button>
+        <div v-if="views.routeInfoPanel && selected.route" class="about-panel">
+            <button @click="resetRoutes()" class="close-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </button>
+
+            <h2>{{ selected.route.name }}</h2>
+
+            <div v-if="selected.route.image" v-bind:style="{ 'background-image': 'url(' + selected.route.image + ')' }" class="about-panel-image"></div>
 
             <audio v-if="selected.route.audio" :id="'audio_' + selected.route.id" autoplay controls disablePictureInPicture controlsList="noplaybackrate nodownload">
                 <source :src="selected.route.audio" type="audio/mpeg" />
             </audio>
 
-            <div v-if="selected.route.description" v-html="selected.route.description"></div>
+            <div v-if="selected.route.description" v-html="selected.route.description" class="about-panel-desc"></div>
+
+            <button @click="ShowRoutePath()" class="show-path">Маршрут ></button>
         </div>
     </div>
     <p v-show="!routes.length" class="text-danger">Маршрутов нет.</p>
@@ -185,6 +199,9 @@ export default {
 
             views: {
                 routesList: true,
+                routesIcons: true,
+                routeInfoPanel: false,
+                routePath: false,
                 searchPanel: false,
                 windowWidth: '',
             },
@@ -241,17 +258,29 @@ export default {
             })
         },
         SelectRoute(route) {
+            this.views.routesIcons = false
             this.views.searchPanel = false
-            this.views.routesList = false
+            this.views.routePath = false
+            this.views.routesList = true
             this.searchInput = ''
 
             axios.get(`/api/route/${route.id}`)
             .then(response => {
                 this.selected.route = response.data
                 this.selected.slide = 1
+
+                this.views.routeInfoPanel = true
             })
 
             this.zoomReset()
+        },
+        ShowRoutePath() {
+            this.views.searchPanel = false
+            this.searchInput = ''
+            this.views.routesList = true
+            this.views.routePath = true
+            this.views.routeInfoPanel = false
+            this.views.routesIcons = false
         },
         PrevScheme(selectedRoute) {
             this.selected.scheme = this.schemes.find(s => s.id == selectedRoute.scheme1_id)
@@ -285,12 +314,18 @@ export default {
             this.selected.route = ''
             this.searchInput = ''
             this.views.routesList = true
+            this.views.routesIcons = true
+            this.views.routePath = false
+            this.views.searchPanel = false
+            this.views.routeInfoPanel = false
         },
         zoomIn() {
             this.panzoom.zoomIn()
+            this.views.routeInfoPanel = false
         },
         zoomOut() {
             this.panzoom.zoomOut()
+            this.views.routeInfoPanel = false
         },
         zoomReset() {
             if(this.routes.length) {
