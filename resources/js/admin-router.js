@@ -21,6 +21,9 @@ import BannerMaster from './components/admin/banners/Master.vue'
 import Screensavers from './components/admin/screensavers/Index.vue'
 import ScreensaverMaster from './components/admin/screensavers/Master.vue'
 
+import Events from './components/admin/events/Index.vue'
+import EventMaster from './components/admin/events/Master.vue'
+
 import Config from './components/admin/config/Edit.vue'
 
 const routes = [
@@ -94,6 +97,16 @@ const routes = [
         path: '/admin/screensaver-master/:id?',
         name: 'ScreensaverMaster',
         component: ScreensaverMaster
+    },
+    {
+        path: '/admin/events',
+        name: 'Events',
+        component: Events
+    },
+    {
+        path: '/admin/event-master/:id?',
+        name: 'EventMaster',
+        component: EventMaster
     },
     {
         path: '/admin/config',

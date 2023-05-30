@@ -24,8 +24,7 @@ class EventController extends Controller
             'name' => 'required',
             'description' => 'required',
             'date' => 'required',
-            'time' => 'required',
-            'image' => 'required',
+            'poster' => 'required',
         ]);
 
         $event = new Event();
@@ -33,8 +32,8 @@ class EventController extends Controller
         $event->name = $request->name;
         $event->description = $request->description;
         $event->date = $request->date;
-        $event->time = $request->time;
-        $event->image = $request->image;
+        $event->poster = $request->poster;
+        $event->comment = $request->comment;
 
         $event->save();
     }
@@ -45,8 +44,7 @@ class EventController extends Controller
             'name' => 'required',
             'description' => 'required',
             'date' => 'required',
-            'time' => 'required',
-            'image' => 'required',
+            'poster' => 'required',
         ]);
 
         $event = Event::find($id);
@@ -54,8 +52,8 @@ class EventController extends Controller
         $event->name = $request->name;
         $event->description = $request->description;
         $event->date = $request->date;
-        $event->time = $request->time;
-        $event->image = $request->image;
+        $event->poster = $request->poster;
+        $event->comment = $request->comment;
 
         $event->save();
     }

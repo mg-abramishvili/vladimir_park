@@ -212,8 +212,8 @@ class FileController extends Controller
             ]);
         }
 
-        if (request()->file('event_image')) {
-            $file = request()->file('event_image');
+        if (request()->file('event_poster')) {
+            $file = request()->file('event_poster');
             $filename = time().'.'.$file->extension();
 
             if (!file_exists(public_path() . '/uploads/events')) {

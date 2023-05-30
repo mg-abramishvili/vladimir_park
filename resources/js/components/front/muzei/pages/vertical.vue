@@ -99,6 +99,10 @@
                 <div v-else-if="block.type == 'routes'">
                     <Routes ref="routes" :kiosk="kiosk" />
                 </div>
+
+                <div v-else-if="block.type == 'events'">
+                    <Events ref="events" />
+                </div>
             </template>
         </div>
 
@@ -122,6 +126,7 @@
 import { read, utils } from 'xlsx'
 
 import Routes from '../../_comps/Routes.vue'
+import Events from '../../_comps/Events.vue'
 
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/swiper.min.css'
@@ -166,6 +171,7 @@ export default {
     },
     components: {
         Routes,
+        Events,
         Swiper,
         SwiperSlide,
     }

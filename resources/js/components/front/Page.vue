@@ -79,6 +79,15 @@ export default {
                             }
                         }
 
+                        if(block.type == 'events') {
+                            if(this.$config.theme == 'vuz2') {
+                                this.$refs.vuz2.$refs.events[0].slideToZero()
+                            }
+                            if(this.$config.theme == 'muzei') {
+                                this.$refs.muzei.$refs.events[0].slideToZero()
+                            }
+                        }
+
                         if(block.type == 'image_slider') {
                             if(this.$config.theme == 'vuz2') {
                                 this.$refs.vuz2.slideToZero()

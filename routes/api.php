@@ -83,6 +83,13 @@ Route::get('admin/screensaver/{id}', [App\Http\Controllers\Admin\ScreensaverCont
 Route::put('admin/screensaver/{id}/update', [App\Http\Controllers\Admin\ScreensaverController::class, 'update']);
 Route::delete('admin/screensaver/{id}/delete', [App\Http\Controllers\Admin\ScreensaverController::class, 'delete']);
 
+// ADMIN EVENTS
+Route::get('admin/events', [App\Http\Controllers\Admin\EventController::class, 'index']);
+Route::post('admin/events', [App\Http\Controllers\Admin\EventController::class, 'store']);
+Route::get('admin/event/{id}', [App\Http\Controllers\Admin\EventController::class, 'event']);
+Route::put('admin/event/{id}/update', [App\Http\Controllers\Admin\EventController::class, 'update']);
+Route::delete('admin/event/{id}/delete', [App\Http\Controllers\Admin\EventController::class, 'delete']);
+
 // ADMIN ICONS
 Route::get('admin/icons', [App\Http\Controllers\Admin\IconController::class, 'index']);
 Route::post('admin/icons', [App\Http\Controllers\Admin\IconController::class, 'store']);

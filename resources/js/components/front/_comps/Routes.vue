@@ -118,7 +118,10 @@
             </swiper> -->
             <ul>
                 <li v-for="route in routes" :key="route.id" @click="SelectRoute(route)">
-                    <a>{{ route.name }}</a>
+                    <a :class="{'routeactive': selected.route.id == route.id}" style="display: flex; align-items: center;">
+                        <img :src="route.icon" style="width: auto; height: auto; max-width: 2vh; max-height: 2vh; margin-right: 1vh">
+                        {{ route.name }}
+                    </a>
                 </li>
             </ul>
         </div>
