@@ -11,11 +11,9 @@
                 <template v-if="page.children.length">
                     <swiper
                         :slides-per-view="3"
-                        :slides-per-column="2"
-                        :slides-per-group="6"
-                        :slides-per-column-fill="page.children.length >= 6 ? 'column' : 'row'"
-                        :space-between="50"
+                        :space-between="0"
                         :allow-touch-move="true"
+                        :center-insufficient-slides="true"
                         @swiper="onSwiper"
                         class="menu-slider">
                         

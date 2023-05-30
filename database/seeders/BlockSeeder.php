@@ -40,6 +40,20 @@ class BlockSeeder extends Seeder
                 'content' => 'routes',
                 'order' => 1,
             ],
+            [
+                'id' => 5,
+                'page_id' => 5,
+                'type' => 'audio',
+                'content' => '/img/vladimir/song1.mp3',
+                'order' => 1,
+            ],
+            [
+                'id' => 6,
+                'page_id' => 6,
+                'type' => 'audio',
+                'content' => '/img/vladimir/song2.mp3',
+                'order' => 1,
+            ],
         ]);
     }
 }

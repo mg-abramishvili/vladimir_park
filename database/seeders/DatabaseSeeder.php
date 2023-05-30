@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             BlockSeeder::class,
             PageSeeder::class,
             SchemeSeeder::class,
+            RouteSeeder::class,
             KioskSeeder::class,
         ]);
     }

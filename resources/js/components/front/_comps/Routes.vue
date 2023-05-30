@@ -82,7 +82,7 @@
                     </template>
 
                     <template v-if="views.routesIcons" v-for="route in routes">
-                        <img v-if="route.scheme1_id == selected.scheme.id" @click="SelectRoute(route)" :src="route.icon" v-bind:style="{ 'position': 'absolute', 'z-index': '1', 'width': '3vh', 'height': '3vh', 'margin-left': '-1.5vh', 'margin-top': '-1.5vh', 'top': route.route_code_floor1[route.route_code_floor1.length - 1].y + 'px', 'left': route.route_code_floor1[route.route_code_floor1.length - 1].x + 'px' }">
+                        <img v-if="route.scheme1_id == selected.scheme.id" @click="SelectRoute(route)" :src="route.icon" v-bind:style="{ 'position': 'absolute', 'z-index': '1', 'width': 'auto', 'height': 'auto', 'max-width': '3vh', 'max-height': '3vh', 'margin-left': '-1.5vh', 'margin-top': '-1.5vh', 'top': route.route_code_floor1[route.route_code_floor1.length - 1].y + 'px', 'left': route.route_code_floor1[route.route_code_floor1.length - 1].x + 'px' }">
                     </template>
                 </div>
             </div>
@@ -258,6 +258,8 @@ export default {
             })
         },
         SelectRoute(route) {
+            this.views.routeInfoPanel = false
+            
             this.views.routesIcons = false
             this.views.searchPanel = false
             this.views.routePath = false

@@ -40,6 +40,14 @@ class IconSeeder extends Seeder
                 'id' => 7,
                 'image' => '/img/vladimir/banner1.jpg',
             ],
+            [
+                'id' => 8,
+                'image' => '/img/vladimir/moldal.png',
+            ],
+            [
+                'id' => 9,
+                'image' => '/img/vladimir/ivanolga.png',
+            ],
         ]);
     }
 }
